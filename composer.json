@@ -1,0 +1,23 @@
+{
+    "name": "hexlet/php-package",
+    "bin": ["bin/php-package"],
+    "type": "library",
+    "authors": [
+      {
+        "name": "mmikhail",
+        "email": "mmikhail@gmail.com"
+      }
+    ],
+    "description": "php-package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mikhailmanov\\PhpProject48\\": "src/"
+        }
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "Php\\Package\\Tests\\": "tests"
+      }
+    }
+  }
