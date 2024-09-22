@@ -1,6 +1,6 @@
 {
-    "name": "hexlet/php-package",
-    "bin": ["bin/php-package"],
+    "name": "hexlet/code",
+    "bin": ["bin/gendiff.php"],
     "type": "library",
     "authors": [
       {
@@ -11,13 +11,16 @@
     "description": "php-package",
     "license": "MIT",
     "autoload": {
-        "psr-4": {
-            "Mikhailmanov\\PhpProject48\\": "src/"
-        }
+       "files": [
+        "src/Parse.php"
+       ] 
     },
     "autoload-dev": {
       "psr-4": {
         "Php\\Package\\Tests\\": "tests"
       }
+    },
+    "require": {
+        "docopt/docopt": "^1.0"
     }
-  }
+}
