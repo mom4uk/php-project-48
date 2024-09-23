@@ -2,14 +2,12 @@
 
 namespace Gendiff;
 
-use function Functional\flatten;
-
-function parse($coll1, $coll2, $item) {
+function parse($coll1, $coll2, $item)
+{
     if (!array_key_exists($item, $coll1) && array_key_exists($item, $coll2)) {
         $normalized = gettype($coll2[$item]) === 'boolean' ? json_encode($coll2[$item]) : $coll2[$item];
-        return "+ {$item}: {$normalized}"; 
-    } 
-    elseif (array_key_exists($item, $coll1) && !array_key_exists($item, $coll2)) {
+        return "+ {$item}: {$normalized}";
+    } elseif (array_key_exists($item, $coll1) && !array_key_exists($item, $coll2)) {
         $normalized = gettype($coll1[$item]) === 'boolean' ? json_encode($coll1[$item]) : $coll1[$item];
         return "- {$item}: {$normalized}";
     } elseif (array_key_exists($item, $coll1) && array_key_exists($item, $coll2) && $coll1[$item] !== $coll2[$item]) {
