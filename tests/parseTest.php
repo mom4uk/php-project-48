@@ -7,20 +7,63 @@ use function Gendiff\genDiff;
 
 class ParseTest extends TestCase
 {
+  private string $path = __DIR__ . "/fixtures/";
+
+  private function getFilePath($name)
+  {
+    return $this->path . $name;
+  }
+
     /** @test */
     public function jsonTest(): void
     {
         $expected = '{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow:
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
 }';
-          
-        $firstFilePath = './tests/fixtures/file1.json';
-        $secondFilePath = './tests/fixtures/file2.json';
+        print_r(__DIR__ . "/fixtures");
+        $firstFilePath = $this->getFilePath('file1.json');
+        $secondFilePath = $this->getFilePath('file2.json');
         
         $this->assertEquals($expected, genDiff($firstFilePath, $secondFilePath));
     }
@@ -28,16 +71,52 @@ class ParseTest extends TestCase
     public function yamlTest(): void
     {
         $expected = '{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow:
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
 }';
           
-        $firstFilePath = './tests/fixtures/file1.yaml';
-        $secondFilePath = './tests/fixtures/file2.yaml';
+        $firstFilePath = $this->getFilePath('file1.yaml');
+        $secondFilePath = $this->getFilePath('file2.yaml');
         
         $this->assertEquals($expected, genDiff($firstFilePath, $secondFilePath));
     }

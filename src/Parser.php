@@ -4,7 +4,7 @@ namespace Parser;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
-use function General\getFormat;
+use function General\isAssociativeArray;
 
 function constructEntry($entry, $flag = '')
 {
@@ -18,7 +18,7 @@ function constructEntry($entry, $flag = '')
     return $result;
 }
 
-function parse($coll1, $coll2, $item)
+function constructDiff($coll1, $coll2, $item)
 {
     if (!array_key_exists($item, $coll1) && array_key_exists($item, $coll2)) {
         return constructEntry([$item, $coll2[$item]], '+');
@@ -31,6 +31,18 @@ function parse($coll1, $coll2, $item)
     } else {
         return constructEntry([$item, $coll1[$item]]);
     }
+}
+
+function getDiff($coll1, $coll2)
+{
+    $unique_keys = array_unique(array_merge(array_keys($file1Content), array_keys($file2Content)));
+    sort($unique_keys);
+    $addedItems = array_map(function ($item) use ($file1Content, $file2Content) {
+        if (!isAssociativeArray($item)) {
+            return constructDiff($item);
+        }
+        return getDiff($file1Content, $file2Content);
+    }, $unique_keys); 
 }
 
 function getContents($filepath1, $filepath2)
