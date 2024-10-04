@@ -35,6 +35,7 @@ function constructDiff($coll1, $coll2, $item)
 
 function getDiff($coll1, $coll2)
 {
+    
     $unique_keys = array_unique(array_merge(array_keys($file1Content), array_keys($file2Content)));
     sort($unique_keys);
     $addedItems = array_map(function ($item) use ($file1Content, $file2Content) {

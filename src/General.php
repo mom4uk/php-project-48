@@ -15,3 +15,12 @@ function getFormat($filepath1, $filepath2)
     }
     return "Error: missmatch in formats: first file format {$firstFileFormat}, second file format {$secondFileFormat}";
 }
+
+function isAssociativeArray($value)
+{
+    if (!is_array($value)) {
+        return false;
+    }
+    $decodedValue = json_decode(json_encode($value), FALSE);
+    return is_array($decodedValue);
+}
