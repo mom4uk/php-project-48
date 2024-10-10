@@ -2,48 +2,93 @@
 
 namespace Parser;
 
-use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
+
 use function General\isAssociativeArray;
+use function General\getFormat;
 
-function constructEntry($entry, $flag = '')
+function format($data, $format)
 {
-    $changeIndent = '  ';
-    $unchangeIndent = '    ';
-     
-    [$key, $value] = $entry;
-    $normalizedValue = gettype($value) === 'boolean' ? json_encode($value) : $value;
+    switch ($format) {
+        case 'stylish':
+            $x = stylish($data); 
+            dump($x);
+            return $x;
+    }
+}
+// $normalizedValue = gettype($value) === 'boolean' ? json_encode($value) : $value;
+function stylish($value)
+{
+    dump(...$value);
+    $iter = function ($spacesCount, $depth, $currentValue) use (&$iter) {
+        $intent = ' ';
+        $intentSize = $depth * $spacesCount;
+        $frontIntent = str_repeat($intent, $intentSize);
+        $backIntent = str_repeat($intent, $intentSize - $spacesCount);
+        // dump($currentValue);
+        if (isAssociativeArray($currentValue) && !array_key_exists('children', $currentValue) || !isAssociativeArray($currentValue) && !array_key_exists('children', $currentValue)) {
+            ['key' => $key, 'value' => $value, 'flag' => $flag] = $currentValue;
+            if (!isAssociativeArray($currentValue)) {
+                [['key' => $key1, 'value' => $value1, 'flag' => $flag1], ['key' => $key2, 'value' => $value2, 'flag' => $flag2]] = $currentValue;
+                return "{$frontIntent}{$flag1} {$key1}: {$value1} \n{$frontIntent}{$flag2} {$key2}: {$value2}";
+            }
+            return "{$frontIntent}{$flag} {$key}: {$value}";
+        }
 
-    $result = $flag === '' ? "{$unchangeIndent}{$key}: {$normalizedValue}\n" : "{$changeIndent}{$flag} {$key}: {$normalizedValue}\n";
-    return $result;
+        $lines = array_map(function ($item) use (&$iter, $depth, $spacesCount,$frontIntent) {
+            // dump($item);
+            // if (isAssociativeArray($item) && !array_key_exists('children', $item) || !isAssociativeArray($item) && !array_key_exists('children', $item)) {
+            //     ['key' => $key, 'value' => $value, 'flag' => $flag] = $item;
+            //     if (!isAssociativeArray($item)) {
+            //         [['key' => $key1, 'value' => $value1, 'flag' => $flag1], ['key' => $key2, 'value' => $value2, 'flag' => $flag2]] = $item;
+            //         return "{$frontIntent}{$flag1} {$key1}: {$value1} \n{$frontIntent}{$flag2} {$key2}: {$value2}";
+            //     }
+            //     return "{$frontIntent}{$flag} {$key}: {$value}";
+            //}
+            ['key' => $key, 'children' => $innerChildren, 'flag' => $flag] = $item;
+            return "{$frontIntent}{$flag} {$key}: 1{$iter($spacesCount, $depth + 1, $item)}";
+        }, $currentValue['children']);
+        // dump($children);
+        $compose = implode("\n", ['{', ...$lines, "{$backIntent}}"]);
+        return $compose;
+    };
+    return $iter(2, 1, ...$value);
 }
 
-function constructDiff($coll1, $coll2, $item)
+function constructDiff($coll1, $coll2, $key, $value)
 {
-    if (!array_key_exists($item, $coll1) && array_key_exists($item, $coll2)) {
-        return constructEntry([$item, $coll2[$item]], '+');
-    } elseif (array_key_exists($item, $coll1) && !array_key_exists($item, $coll2)) {
-        return constructEntry([$item, $coll1[$item]], '-');
-    } elseif (array_key_exists($item, $coll1) && array_key_exists($item, $coll2) && $coll1[$item] !== $coll2[$item]) {
-        $firstValue = constructEntry([$item, $coll1[$item]], '-');
-        $secondValue = constructEntry([$item, $coll2[$item]], '+');
-        return "{$firstValue}{$secondValue}";
-    } else {
-        return constructEntry([$item, $coll1[$item]]);
+    // dump($key, $value);
+    if (array_key_exists($key, $coll1) && array_key_exists($key, $coll2) && isAssociativeArray($coll1[$key])) {
+        return ['key' => $key, 'children' => $value, 'flag' => ''];
+    }
+    elseif (array_key_exists($key, $coll1) && array_key_exists($key, $coll2) && $coll1[$key] === $coll2[$key]) {
+        // dump($key, $value);
+        return ['key' => $key, 'value' => $value, 'flag' => ''];
+    } elseif (array_key_exists($key, $coll1) && !array_key_exists($key, $coll2)) {
+        return ['key' => $key, 'value' => $value, 'flag' => '-'];
+    } elseif (!array_key_exists($key, $coll1) && array_key_exists($key, $coll2)) {
+        return ['key' => $key, 'value' => $coll2[$key], 'flag' => '+'];
+    }  else {
+       return [
+           ['key' => $key, 'value' => $coll1[$key], 'flag' => '-'],
+           ['key' => $key, 'value' => $coll2[$key], 'flag' => '+']
+        ];
     }
 }
 
 function getDiff($coll1, $coll2)
 {
-    
-    $unique_keys = array_unique(array_merge(array_keys($file1Content), array_keys($file2Content)));
+    $unique_keys = array_unique(array_merge(array_keys($coll1), array_keys($coll2)));
     sort($unique_keys);
-    $addedItems = array_map(function ($item) use ($file1Content, $file2Content) {
-        if (!isAssociativeArray($item)) {
-            return constructDiff($item);
+    $diff = array_map(function ($key) use ($coll1, $coll2) {
+        // dump($key, $value);
+        if (!isAssociativeArray($coll1[$key])) {
+            return constructDiff($coll1, $coll2, $key, $coll1[$key]);
         }
-        return getDiff($file1Content, $file2Content);
-    }, $unique_keys); 
+        return ['children' => [constructDiff($coll1, $coll2, $key, getDiff($coll1[$key], $coll2[$key]))]];
+    },
+    $unique_keys);
+    return $diff;
 }
 
 function getContents($filepath1, $filepath2)

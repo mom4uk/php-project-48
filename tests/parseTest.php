@@ -61,7 +61,6 @@ class ParseTest extends TestCase
         fee: 100500
     }
 }';
-        print_r(__DIR__ . "/fixtures");
         $firstFilePath = $this->getFilePath('file1.json');
         $secondFilePath = $this->getFilePath('file2.json');
         
