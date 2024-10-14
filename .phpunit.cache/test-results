@@ -1,1 +1,1 @@
-{"version":1,"defects":{"Php\\Package\\Tests\\ParseTest::jsonTest":7,"Php\\Package\\Tests\\ParseTest::yamlTest":8},"times":{"Php\\Package\\Tests\\ParseTest::jsonTest":0.023,"Php\\Package\\Tests\\ParseTest::yamlTest":0}}
+{"version":1,"defects":{"Php\\Package\\Tests\\ParseTest::jsonTest":7,"Php\\Package\\Tests\\ParseTest::yamlTest":8},"times":{"Php\\Package\\Tests\\ParseTest::jsonTest":0.021,"Php\\Package\\Tests\\ParseTest::yamlTest":0}}
