@@ -21,6 +21,6 @@ function isAssociativeArray($value)
     if (!is_array($value)) {
         return false;
     }
-    $decodedValue = json_decode(json_encode($value), FALSE);
+    $decodedValue = json_decode(json_encode($value), false);
     return !is_array($decodedValue);
 }

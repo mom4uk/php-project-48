@@ -9,7 +9,7 @@ use function Parser\format;
 function genDiff($filepath1, $filepath2, $format = 'stylish')
 {
     $contents = getContents($filepath1, $filepath2);
-    $diff = getDiff(...$contents); 
+    $diff = getDiff(...$contents);
     $formatedDiff = format($diff, $format);
     // dump($formatedDiff);
     return $formatedDiff;

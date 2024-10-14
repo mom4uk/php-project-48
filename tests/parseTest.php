@@ -30,7 +30,7 @@ class ParseTest extends TestCase
         }
         setting6: {
             doge: {
-              - wow:
+              - wow: 
               + wow: so much
             }
             key: value
@@ -82,7 +82,7 @@ class ParseTest extends TestCase
         }
         setting6: {
             doge: {
-              - wow:
+              - wow: 
               + wow: so much
             }
             key: value
