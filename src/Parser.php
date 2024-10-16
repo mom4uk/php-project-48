@@ -8,6 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 
 use function General\isAssociativeArray;
 use function General\getFormat;
+use function General\stringify;
 
 function format($data, $format)
 {
@@ -15,35 +16,9 @@ function format($data, $format)
         case 'stylish':
             $x = stylish($data);
             return $x;
+        case 'plain':
+            return plain($data);
     }
-}
-
-function toString($value)
-{
-    return trim(var_export($value, true), "'");
-}
-
-function stringify($data, $depth, $spacesCount = 2, $replacer = ' ')
-{
-
-    $iter = function ($value, $depth) use (&$iter, $replacer, $spacesCount) {
-        if (!is_array($value)) {
-            return toString($value);
-        }
-        $intentSize = $depth * $spacesCount;
-        $frontIntent = str_repeat($replacer, $intentSize);
-        $backIntent = str_repeat($replacer, $intentSize - $spacesCount * 2);
-        $lines = array_map(
-            fn($key, $val) => "{$frontIntent}{$key}: {$iter($val, $depth + 2)}",
-            array_keys($value),
-            $value
-        );
-
-        $compose = ['{', ...$lines, "{$backIntent}}"];
-        return implode("\n", $compose);
-    };
-
-    return $iter($data, $depth);
 }
 
 function normalizeValue($value, $depth)

@@ -6,10 +6,10 @@ use function Parser\getDiff;
 use function Parser\getContents;
 use function Parser\format;
 
-function genDiff($filepath1, $filepath2, $format = 'stylish')
+function genDiff($filepath1, $filepath2, $formatName = 'stylish')
 {
     $contents = getContents($filepath1, $filepath2);
     $diff = getDiff(...$contents);
-    $formatedDiff = format($diff, $format);
+    $formatedDiff = format($diff, $formatName);
     return $formatedDiff;
 }
