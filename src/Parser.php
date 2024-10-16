@@ -56,7 +56,6 @@ function normalizeValue($value, $depth)
 
 function stylish($value)
 {
-    // dump($value);
     $iter = function ($spacesCount, $depth, $currentValue) use (&$iter) {
         $intent = ' ';
         $intentSize = $depth * $spacesCount;
@@ -109,8 +108,14 @@ function getDiff($coll1, $coll2)
 {
     $unique_keys = array_unique(array_merge(array_keys($coll1), array_keys($coll2)));
     sort($unique_keys);
+    // mb you need to use array_values and work with it? to reduce if constructions
     $diff = array_map(function ($key) use ($coll1, $coll2) {
-        if (!isAssociativeArray($coll1[$key]) || !isAssociativeArray($coll2[$key])) {
+        $isntArraysAssociativeArr = array_key_exists($key, $coll1) && !isAssociativeArray($coll1[$key]) || array_key_exists($key, $coll2) && !isAssociativeArray($coll2[$key]);
+        $isOneOfValuesExist = array_key_exists($key, $coll1) && !array_key_exists($key, $coll2) || array_key_exists($key, $coll2) && !array_key_exists($key, $coll1);
+        if ($isntArraysAssociativeArr || $isOneOfValuesExist) {
+            if (!array_key_exists($key, $coll1)) {
+                return constructDiff($coll1, $coll2, $key, $coll2[$key]);
+            }
             return constructDiff($coll1, $coll2, $key, $coll1[$key]);
         }
         return constructDiff($coll1, $coll2, $key, getDiff($coll1[$key], $coll2[$key]));
@@ -131,8 +136,8 @@ function getContents($filepath1, $filepath2)
         case 'yaml':
             $file1Content = Yaml::parse(file_get_contents($filepath1), Yaml::PARSE_OBJECT_FOR_MAP);
             $file2Content = Yaml::parse(file_get_contents($filepath2), Yaml::PARSE_OBJECT_FOR_MAP);
-            $x = json_decode(json_encode($file1Content), true);
-            $y = json_decode(json_encode($file2Content), true);
-            return [$x, $y];
+            $decodedContent1 = json_decode(json_encode($file1Content), true);
+            $decodedContent2 = json_decode(json_encode($file2Content), true);
+            return [$decodedContent1, $decodedContent2];
     }
 }
