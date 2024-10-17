@@ -3,13 +3,13 @@
 namespace Gendiff;
 
 use function Parser\getDiff;
-use function Parser\getContents;
+use function General\getContents;
 use function Parser\format;
 
-function genDiff($filepath1, $filepath2, $formatName = 'stylish')
+function genDiff($filepath1, $filepath2, $format = 'stylish')
 {
     $contents = getContents($filepath1, $filepath2);
     $diff = getDiff(...$contents);
-    $formatedDiff = format($diff, $formatName);
+    $formatedDiff = format($diff, $format);
     return $formatedDiff;
 }

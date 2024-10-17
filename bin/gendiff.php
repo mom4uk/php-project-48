@@ -28,7 +28,7 @@ Options:
 DOCOPT;
 
 $args = Docopt::handle($doc);
-$filepath1 = $args['<firstFile>'];
-$filepath2 = $args['<secondFile>'];
-$formatName = $args['--format'];
-print_r(genDiff($filepath1, $filepath2, $formatName));
+$path1 = $args['<firstFile>'];
+$path2 = $args['<secondFile>'];
+$format = $args['--format'];
+print_r(genDiff($path1, $path2, $format));

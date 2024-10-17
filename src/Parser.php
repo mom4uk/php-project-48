@@ -2,61 +2,18 @@
 
 namespace Parser;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
-use Symfony\Component\Yaml\Yaml;
-
 use function General\isAssociativeArray;
-use function General\getFormat;
-use function General\stringify;
+use function Formatters\Stylish\stylish;
+use function Formatters\Plain\plain;
 
 function format($data, $format)
 {
     switch ($format) {
         case 'stylish':
-            $x = stylish($data);
-            return $x;
+            return stylish($data);;
         case 'plain':
             return plain($data);
     }
-}
-
-function normalizeValue($value, $depth)
-{
-    if (!isAssociativeArray($value)) {
-        return gettype($value) === 'boolean' || gettype($value) === 'NULL' ? json_encode($value) : $value;
-    }
-    return stringify($value, $depth);
-}
-
-function stylish($value)
-{
-    $iter = function ($spacesCount, $depth, $currentValue) use (&$iter) {
-        $intent = ' ';
-        $intentSize = $depth * $spacesCount;
-        $frontIntent = str_repeat($intent, $intentSize);
-        $backIntent = str_repeat($intent, $intentSize - $spacesCount);
-
-        $lines = array_map(function ($item) use (&$iter, $depth, $spacesCount, $frontIntent) {
-
-            $normalizedValue = fn ($item, $depth) => normalizeValue($item, $depth);
-
-            if (!array_key_exists('children', $item)) {
-                [['key' => $key1, 'value' => $value1, 'flag' => $flag1], ['key' => $key2, 'value' => $value2, 'flag' => $flag2]] = $item;
-                return "{$frontIntent}{$flag1} {$key1}: {$normalizedValue($value1, $depth + 3)}\n{$frontIntent}{$flag2} {$key2}: {$normalizedValue($value2, $depth + 3)}";
-            }
-            if (array_key_exists('children', $item) && count($item['children']) === 0) {
-                ['key' => $key, 'value' => $value, 'flag' => $flag] = $item;
-                return "{$frontIntent}{$flag} {$key}: {$normalizedValue($value, $depth + 3)}";
-            }
-            ['key' => $key, 'children' => $children, 'flag' => $flag] = $item;
-            return "{$frontIntent}{$flag} {$key}: {$iter($spacesCount, $depth + 2, $children)}";
-        }, $currentValue);
-
-        $compose = implode("\n", ['{', ...$lines, "{$backIntent}}"]);
-        return $compose;
-    };
-    return $iter(2, 1, $value);
 }
 
 function constructDiff($coll1, $coll2, $key, $value)
@@ -97,22 +54,4 @@ function getDiff($coll1, $coll2)
     },
     $unique_keys);
     return $diff;
-}
-
-function getContents($filepath1, $filepath2)
-{
-    $format = getFormat($filepath1, $filepath2);
-    $normalizedYamlFormat = $format === 'yml' ? 'yaml' : $format;
-    switch ($normalizedYamlFormat) {
-        case 'json':
-            $file1Content = json_decode(file_get_contents($filepath1), true);
-            $file2Content = json_decode(file_get_contents($filepath2), true);
-            return [$file1Content, $file2Content];
-        case 'yaml':
-            $file1Content = Yaml::parse(file_get_contents($filepath1), Yaml::PARSE_OBJECT_FOR_MAP);
-            $file2Content = Yaml::parse(file_get_contents($filepath2), Yaml::PARSE_OBJECT_FOR_MAP);
-            $decodedContent1 = json_decode(json_encode($file1Content), true);
-            $decodedContent2 = json_decode(json_encode($file2Content), true);
-            return [$decodedContent1, $decodedContent2];
-    }
 }

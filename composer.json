@@ -14,7 +14,9 @@
        "files": [
         "src/Gendiff.php",
         "src/Parser.php",
-        "src/General.php"
+        "src/General.php",
+        "src/Formatters/Stylish.php",
+        "src/Formatters/Plain.php"
        ] 
     },
     "autoload-dev": {

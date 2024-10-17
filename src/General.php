@@ -2,6 +2,8 @@
 
 namespace General;
 
+use Symfony\Component\Yaml\Yaml;
+
 function getFormat($filepath1, $filepath2)
 {
     $splitedPath1 = explode('.', $filepath1);
@@ -51,4 +53,22 @@ function stringify($data, $depth, $spacesCount = 2, $replacer = ' ')
     };
 
     return $iter($data, $depth);
+}
+
+function getContents($filepath1, $filepath2)
+{
+    $format = getFormat($filepath1, $filepath2);
+    $normalizedYamlFormat = $format === 'yml' ? 'yaml' : $format;
+    switch ($normalizedYamlFormat) {
+        case 'json':
+            $file1Content = json_decode(file_get_contents($filepath1), true);
+            $file2Content = json_decode(file_get_contents($filepath2), true);
+            return [$file1Content, $file2Content];
+        case 'yaml':
+            $file1Content = Yaml::parse(file_get_contents($filepath1), Yaml::PARSE_OBJECT_FOR_MAP);
+            $file2Content = Yaml::parse(file_get_contents($filepath2), Yaml::PARSE_OBJECT_FOR_MAP);
+            $decodedContent1 = json_decode(json_encode($file1Content), true);
+            $decodedContent2 = json_decode(json_encode($file2Content), true);
+            return [$decodedContent1, $decodedContent2];
+    }
 }
