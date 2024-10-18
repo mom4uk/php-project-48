@@ -4,6 +4,11 @@ namespace General;
 
 use Symfony\Component\Yaml\Yaml;
 
+function normalizeValue($value)
+{
+    return gettype($value) === 'boolean' || gettype($value) === 'NULL' ? json_encode($value) : $value;
+}
+
 function getFormat($filepath1, $filepath2)
 {
     $splitedPath1 = explode('.', $filepath1);
@@ -51,7 +56,7 @@ function stringify($data, $depth, $spacesCount = 2, $replacer = ' ')
         $compose = ['{', ...$lines, "{$backIntent}}"];
         return implode("\n", $compose);
     };
-
+    
     return $iter($data, $depth);
 }
 

@@ -10,6 +10,9 @@ validate:
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 src bin
 
+fixlint:
+	composer exec --verbose phpcbf -- --standard=PSR12 src bin
+
 tests: 
 	composer exec --verbose phpunit tests
 

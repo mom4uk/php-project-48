@@ -4,14 +4,7 @@ namespace Formatters\Stylish;
 
 use function General\isAssociativeArray;
 use function General\stringify;
-
-function normalizeValue($value, $depth)
-{
-    if (!isAssociativeArray($value)) {
-        return gettype($value) === 'boolean' || gettype($value) === 'NULL' ? json_encode($value) : $value;
-    }
-    return stringify($value, $depth);
-}
+use function General\normalizeValue;
 
 function stylish($value)
 {
@@ -23,7 +16,7 @@ function stylish($value)
 
         $lines = array_map(function ($item) use (&$iter, $depth, $spacesCount, $frontIntent) {
 
-            $normalizedValue = fn ($item, $depth) => normalizeValue($item, $depth);
+            $normalizedValue = fn ($item, $depth) => (isAssociativeArray($item) ? stringify($item, $depth) : normalizeValue($item, $depth));
 
             if (!array_key_exists('children', $item)) {
                 [['key' => $key1, 'value' => $value1, 'flag' => $flag1], ['key' => $key2, 'value' => $value2, 'flag' => $flag2]] = $item;

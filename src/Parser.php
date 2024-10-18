@@ -12,6 +12,7 @@ function format($data, $format)
         case 'stylish':
             return stylish($data);;
         case 'plain':
+            // dump(plain($data));
             return plain($data);
     }
 }
