@@ -23,7 +23,7 @@ class DifferTest extends TestCase
         $firstFilePathYaml = $this->getFilePath('file1.yaml');
         $secondFilePathYaml = $this->getFilePath('file2.yaml');
 
-        $stylishExpectedPath = $this->getFilePath('../fixtures/rightStylish');
+        $stylishExpectedPath = $this->getFilePath('rightStylish');
         $plainExpectedPath = $this->getFilePath('rightPlain');
         $jsonExpectedPath = $this->getFilePath('rightJson');
 
