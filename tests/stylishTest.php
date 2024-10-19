@@ -68,15 +68,15 @@ class StylishTest extends TestCase
     {
         $firstFilePath = $this->getFilePath('file1.json');
         $secondFilePath = $this->getFilePath('file2.json');
-        
-        $this->assertEquals($this->expected, genDiff($firstFilePath, $secondFilePath));
+        $diff = genDiff($firstFilePath, $secondFilePath, 'stylish');
+        $this->assertEquals($this->expected, $diff);
     }
     /** @test */
     public function yamlTest(): void
     {     
         $firstFilePath = $this->getFilePath('file1.yaml');
         $secondFilePath = $this->getFilePath('file2.yaml');
-        
-        $this->assertEquals($this->expected, genDiff($firstFilePath, $secondFilePath));
+        $diff = genDiff($firstFilePath, $secondFilePath, 'json');
+        $this->assertEquals($this->expected, $diff);
     }
 }

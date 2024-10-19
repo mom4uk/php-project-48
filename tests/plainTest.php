@@ -35,15 +35,15 @@ Property \'group3\' was added with value: [complex value]';
     {
         $firstFilePath = $this->getFilePath('file1.json');
         $secondFilePath = $this->getFilePath('file2.json');
-        
-        $this->assertEquals($this->expected, genDiff($firstFilePath, $secondFilePath, 'plain'));
+        $diff = genDiff($firstFilePath, $secondFilePath, 'plain');
+        $this->assertEquals($this->expected, $diff);
     }
     /** @test */
     public function yamlTest(): void
     {     
         $firstFilePath = $this->getFilePath('file1.yaml');
         $secondFilePath = $this->getFilePath('file2.yaml');
-        
-        $this->assertEquals($this->expected, genDiff($firstFilePath, $secondFilePath, 'plain'));
+        $diff = genDiff($firstFilePath, $secondFilePath, 'plain');
+        $this->assertEquals($this->expected, $diff);
     }
 }
