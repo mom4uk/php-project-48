@@ -6,6 +6,8 @@ use function General\isAssociativeArray;
 use function Formatters\Stylish\makeStylish;
 use function Formatters\Plain\makePlain;
 use function Formatters\Json\makeJson;
+use function Functional\sort;
+use function Functional\first_index_of;
 
 function format($data, $format)
 {
@@ -44,8 +46,8 @@ function constructDiff($coll1, $coll2, $key, $value)
 
 function getDiff($coll1, $coll2)
 {
-    $unique_keys = array_unique(array_merge(array_keys($coll1), array_keys($coll2)));
-    sort($unique_keys);
+    $uniqueKeys = array_unique(array_merge(array_keys($coll1), array_keys($coll2)));
+    $sortedKeys = sort($uniqueKeys, fn($first, $second) => $first <=> $second);
     // mb you need to use array_values and work with it? to reduce if constructions
     $diff = array_map(function ($key) use ($coll1, $coll2) {
         $isntArraysAssociativeArr = array_key_exists($key, $coll1) && !isAssociativeArray($coll1[$key])
@@ -60,6 +62,6 @@ function getDiff($coll1, $coll2)
         }
         return constructDiff($coll1, $coll2, $key, getDiff($coll1[$key], $coll2[$key]));
     },
-    $unique_keys);
+    $sortedKeys);
     return $diff;
 }
