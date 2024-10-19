@@ -56,7 +56,7 @@ function stringify($data, $depth, $spacesCount = 2, $replacer = ' ')
         $compose = ['{', ...$lines, "{$backIntent}}"];
         return implode("\n", $compose);
     };
-    
+
     return $iter($data, $depth);
 }
 

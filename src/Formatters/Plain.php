@@ -5,7 +5,8 @@ namespace Formatters\Plain;
 use function General\isAssociativeArray;
 use function General\normalizeValue;
 
-function constructLine($path, $value) {
+function constructLine($path, $value)
+{
 
     $normalizeValue = function ($value) {
         if (isAssociativeArray($value)) {
@@ -31,7 +32,7 @@ function constructLine($path, $value) {
     }
 }
 
-function plain($value)
+function makePlain($value)
 {
     // dump($value);
     $iter = function ($currentValue, $path) use (&$iter) {

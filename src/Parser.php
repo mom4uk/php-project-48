@@ -3,23 +3,28 @@
 namespace Parser;
 
 use function General\isAssociativeArray;
-use function Formatters\Stylish\stylish;
-use function Formatters\Plain\plain;
+use function Formatters\Stylish\makeStylish;
+use function Formatters\Plain\makePlain;
+use function Formatters\Json\makeJson;
 
 function format($data, $format)
 {
     switch ($format) {
         case 'stylish':
-            return stylish($data);;
+            return makeStylish($data);
         case 'plain':
-            // dump(plain($data));
-            return plain($data);
+            return makePlain($data);
+        case 'json':
+            return makeJson($data);
     }
 }
 
 function constructDiff($coll1, $coll2, $key, $value)
 {
-    if (array_key_exists($key, $coll1) && array_key_exists($key, $coll2) && isAssociativeArray($coll1[$key]) && isAssociativeArray($coll2[$key])) {
+    if (
+        array_key_exists($key, $coll1) && array_key_exists($key, $coll2)
+        && isAssociativeArray($coll1[$key]) && isAssociativeArray($coll2[$key])
+    ) {
         return ['key' => $key, 'children' => $value, 'flag' => ' '];
     }
     if (array_key_exists($key, $coll1) && array_key_exists($key, $coll2) && $coll1[$key] === $coll2[$key]) {
@@ -43,8 +48,10 @@ function getDiff($coll1, $coll2)
     sort($unique_keys);
     // mb you need to use array_values and work with it? to reduce if constructions
     $diff = array_map(function ($key) use ($coll1, $coll2) {
-        $isntArraysAssociativeArr = array_key_exists($key, $coll1) && !isAssociativeArray($coll1[$key]) || array_key_exists($key, $coll2) && !isAssociativeArray($coll2[$key]);
-        $isOneOfValuesExist = array_key_exists($key, $coll1) && !array_key_exists($key, $coll2) || array_key_exists($key, $coll2) && !array_key_exists($key, $coll1);
+        $isntArraysAssociativeArr = array_key_exists($key, $coll1) && !isAssociativeArray($coll1[$key])
+        || array_key_exists($key, $coll2) && !isAssociativeArray($coll2[$key]);
+        $isOneOfValuesExist = array_key_exists($key, $coll1) && !array_key_exists($key, $coll2)
+        || array_key_exists($key, $coll2) && !array_key_exists($key, $coll1);
         if ($isntArraysAssociativeArr || $isOneOfValuesExist) {
             if (!array_key_exists($key, $coll1)) {
                 return constructDiff($coll1, $coll2, $key, $coll2[$key]);
