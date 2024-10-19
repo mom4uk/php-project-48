@@ -12,7 +12,7 @@ class JsonTest extends TestCase
 
   public function setUp(): void
   {
-    $this->expected = '""';
+    $this->expected = '{"x":1}';
   }
 
   private function getFilePath($name)
