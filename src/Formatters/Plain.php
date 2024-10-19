@@ -5,7 +5,7 @@ namespace Formatters\Plain;
 use function General\isAssociativeArray;
 use function General\normalizeValue;
 
-function constructLine(string $path, array|string|int $value)
+function constructLine(string $path, array $value)
 {
 
     $normalizeValue = function ($value) {
@@ -23,9 +23,9 @@ function constructLine(string $path, array|string|int $value)
         [['value' => $value1], ['value' => $value2]] = $value;
         return "Property '{$path}' was updated. From {$normalizeValue($value1)} to {$normalizeValue($value2)}";
     }
-    ['value' => $value, 'flag' => $flag] = $value;
+    ['value' => $innerValue, 'flag' => $flag] = $value;
     if ($flag === '+') {
-        return "Property '{$path}' was added with value: {$normalizeValue($value)}";
+        return "Property '{$path}' was added with value: {$normalizeValue($innerValue)}";
     }
     if ($flag === '-') {
         return "Property '{$path}' was removed";
