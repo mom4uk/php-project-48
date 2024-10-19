@@ -7,7 +7,6 @@ use function Formatters\Stylish\makeStylish;
 use function Formatters\Plain\makePlain;
 use function Formatters\Json\makeJson;
 use function Functional\sort;
-use function Functional\first_index_of;
 
 function format($data, $format)
 {
