@@ -64,7 +64,7 @@ function getContents(string $filepath1, string $filepath2)
 {
     $format = getFormat($filepath1, $filepath2);
     $normalizedYamlFormat = $format === 'yml' ? 'yaml' : $format;
-    $wrap = fn(string $item) => file_get_contents($item);
+    $wrap = fn($item) :string => file_get_contents($item);
     switch ($normalizedYamlFormat) {
         case 'json':
             $file1Content = json_decode($wrap($filepath1), true);
