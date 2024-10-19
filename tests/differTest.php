@@ -35,7 +35,7 @@ class DifferTest extends TestCase
         $plainExpected = file_get_contents($plainExpectedPath);
         $this->assertEquals($plainExpected, genDiff($firstFilePathJson, $secondFilePathJson, 'plain'));
         $this->assertEquals($plainExpected, genDiff($firstFilePathYaml, $secondFilePathYaml, 'plain'));
-
+        // fix value: "200" to value: 200 !
         $jsonExpected = file_get_contents($jsonExpectedPath);
         $this->assertEquals($jsonExpected, genDiff($firstFilePathJson, $secondFilePathJson, 'json'));
         $this->assertEquals($jsonExpected, genDiff($firstFilePathYaml, $secondFilePathYaml, 'json'));

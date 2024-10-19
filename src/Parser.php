@@ -20,7 +20,7 @@ function format(array $data, string $format)
     }
 }
 
-function constructDiff(array $coll1, array $coll2, string $key, string|array|NULL|bool $value)
+function constructDiff(array $coll1, array $coll2, string $key, string|array|null|bool $value)
 {
     if (
         array_key_exists($key, $coll1) && array_key_exists($key, $coll2)

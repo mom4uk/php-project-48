@@ -4,7 +4,7 @@ namespace General;
 
 use Symfony\Component\Yaml\Yaml;
 
-function normalizeValue(string|bool|NULL|int $value)
+function normalizeValue(string|bool|null|int $value)
 {
     return gettype($value) === 'boolean' || gettype($value) === 'NULL' ? json_encode($value) : $value;
 }
@@ -23,7 +23,7 @@ function getFormat(string $filepath1, string $filepath2)
     return "Error: missmatch in formats: first file format {$firstFileFormat}, second file format {$secondFileFormat}";
 }
 
-function isAssociativeArray(string|array|NULL|int $value)
+function isAssociativeArray(string|array|null|int $value)
 {
     if (!is_array($value)) {
         return false;
