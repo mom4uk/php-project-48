@@ -12,7 +12,7 @@
     "license": "MIT",
     "autoload": {
        "files": [
-        "src/Gendiff.php",
+        "src/Differ.php",
         "src/Parser.php",
         "src/General.php",
         "src/Formatters/Stylish.php",

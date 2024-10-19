@@ -3,7 +3,7 @@
 namespace Php\Package\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Gendiff\genDiff;
+use function Differ\Differ\genDiff;
 
 class StylishTest extends TestCase
 {
@@ -76,7 +76,7 @@ class StylishTest extends TestCase
     {     
         $firstFilePath = $this->getFilePath('file1.yaml');
         $secondFilePath = $this->getFilePath('file2.yaml');
-        $diff = genDiff($firstFilePath, $secondFilePath, 'json');
+        $diff = genDiff($firstFilePath, $secondFilePath, 'stylish');
         $this->assertEquals($this->expected, $diff);
     }
 }

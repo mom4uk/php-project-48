@@ -3,7 +3,7 @@
 namespace Php\Package\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Gendiff\genDiff;
+use function Differ\Differ\genDiff;
 
 class JsonTest extends TestCase
 {
