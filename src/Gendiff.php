@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ;
+namespace Gendiff;
 
 use function Parser\getDiff;
 use function General\getContents;
