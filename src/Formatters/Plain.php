@@ -12,11 +12,11 @@ function constructLine($path, $value)
         if (isAssociativeArray($value)) {
             return '[complex value]';
         }
-        if (gettype($value) === 'boolean' || gettype($value) === 'NULL') {
-            return normalizeValue($value);
+        if (gettype($value) === 'string') {
+            $x = fn($item) => normalizeValue($item);
+            return "'{$x($value)}'";
         }
-        $x = fn($item) => normalizeValue($item);
-        return "'{$x($value)}'";
+        return normalizeValue($value);
     };
 
     if (!isAssociativeArray($value)) {
