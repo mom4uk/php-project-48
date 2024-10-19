@@ -3,7 +3,7 @@
 namespace Php\Package\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Gendiff\genDiff;
+use function Differ\genDiff;
 
 class StylishTest extends TestCase
 {
