@@ -5,7 +5,7 @@ namespace Formatters\Plain;
 use function General\isAssociativeArray;
 use function General\normalizeValue;
 
-function constructLine($path, $value)
+function constructLine(string $path, array|string|int $value)
 {
 
     $normalizeValue = function ($value) {
@@ -32,9 +32,8 @@ function constructLine($path, $value)
     }
 }
 
-function makePlain($value)
+function makePlain(array $value)
 {
-    // dump($value);
     $iter = function ($currentValue, $path) use (&$iter) {
         $lines = array_filter(array_map(function ($item) use (&$iter, $path) {
 
@@ -47,12 +46,11 @@ function makePlain($value)
             ['key' => $key] = $item;
             $newPath = $path === '' ? "{$key}" : "{$path}.{$key}";
 
-            if (array_key_exists('children', $item) && $item['children'] === []) {
+            if ($item['children'] === []) {
                 return constructLine($newPath, $item);
             }
             return $iter($item['children'], $newPath);
         }, $currentValue), fn($item) => !is_null($item));
-        // dump($lines);
         $combinedLines = implode("\n", $lines);
         return $combinedLines;
     };

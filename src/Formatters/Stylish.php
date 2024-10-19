@@ -6,7 +6,7 @@ use function General\isAssociativeArray;
 use function General\stringify;
 use function General\normalizeValue;
 
-function makeStylish($value)
+function makeStylish(array $value)
 {
     $iter = function ($spacesCount, $depth, $currentValue) use (&$iter) {
         $intent = ' ';
@@ -17,7 +17,7 @@ function makeStylish($value)
         $lines = array_map(function ($item) use (&$iter, $depth, $spacesCount, $frontIntent) {
 
             $normalizedValue = fn ($item, $depth) =>
-            (isAssociativeArray($item) ? stringify($item, $depth) : normalizeValue($item, $depth));
+            (isAssociativeArray($item) ? stringify($item, $depth) : normalizeValue($item));
 
             if (!array_key_exists('children', $item)) {
                 [
@@ -27,7 +27,7 @@ function makeStylish($value)
                 return "{$frontIntent}{$flag1} {$key1}: {$normalizedValue($value1, $depth + 3)}" .
                  "\n" . "{$frontIntent}{$flag2} {$key2}: {$normalizedValue($value2, $depth + 3)}";
             }
-            if (array_key_exists('children', $item) && count($item['children']) === 0) {
+            if (count($item['children']) === 0) {
                 ['key' => $key, 'value' => $value, 'flag' => $flag] = $item;
                 return "{$frontIntent}{$flag} {$key}: {$normalizedValue($value, $depth + 3)}";
             }

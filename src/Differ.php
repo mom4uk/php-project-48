@@ -6,7 +6,7 @@ use function Parser\getDiff;
 use function General\getContents;
 use function Parser\format;
 
-function genDiff($filepath1, $filepath2, $format = 'stylish')
+function genDiff(string $filepath1, string $filepath2, string $format = 'stylish')
 {
     $contents = getContents($filepath1, $filepath2);
     $diff = getDiff(...$contents);

@@ -8,7 +8,7 @@ use function Formatters\Plain\makePlain;
 use function Formatters\Json\makeJson;
 use function Functional\sort;
 
-function format($data, $format)
+function format(array $data, string $format)
 {
     switch ($format) {
         case 'stylish':
@@ -20,7 +20,7 @@ function format($data, $format)
     }
 }
 
-function constructDiff($coll1, $coll2, $key, $value)
+function constructDiff(array $coll1, array $coll2, string $key, string|array|NULL|bool $value)
 {
     if (
         array_key_exists($key, $coll1) && array_key_exists($key, $coll2)
@@ -43,7 +43,7 @@ function constructDiff($coll1, $coll2, $key, $value)
             ];
 }
 
-function getDiff($coll1, $coll2)
+function getDiff(array $coll1, array $coll2)
 {
     $uniqueKeys = array_unique(array_merge(array_keys($coll1), array_keys($coll2)));
     $sortedKeys = sort($uniqueKeys, fn($first, $second) => $first <=> $second);

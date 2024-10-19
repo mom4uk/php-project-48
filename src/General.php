@@ -4,12 +4,12 @@ namespace General;
 
 use Symfony\Component\Yaml\Yaml;
 
-function normalizeValue($value)
+function normalizeValue(string|bool|NULL|int $value)
 {
     return gettype($value) === 'boolean' || gettype($value) === 'NULL' ? json_encode($value) : $value;
 }
 
-function getFormat($filepath1, $filepath2)
+function getFormat(string $filepath1, string $filepath2)
 {
     $splitedPath1 = explode('.', $filepath1);
     $splitedPath2 = explode('.', $filepath2);
@@ -23,7 +23,7 @@ function getFormat($filepath1, $filepath2)
     return "Error: missmatch in formats: first file format {$firstFileFormat}, second file format {$secondFileFormat}";
 }
 
-function isAssociativeArray($value)
+function isAssociativeArray(string|array|NULL|int $value)
 {
     if (!is_array($value)) {
         return false;
@@ -37,7 +37,7 @@ function toString($value)
     return trim(var_export($value, true), "'");
 }
 
-function stringify($data, $depth, $spacesCount = 2, $replacer = ' ')
+function stringify(array $data, int $depth, int $spacesCount = 2, string $replacer = ' ')
 {
 
     $iter = function ($value, $depth) use (&$iter, $replacer, $spacesCount) {
@@ -60,7 +60,7 @@ function stringify($data, $depth, $spacesCount = 2, $replacer = ' ')
     return $iter($data, $depth);
 }
 
-function getContents($filepath1, $filepath2)
+function getContents(string $filepath1, string $filepath2)
 {
     $format = getFormat($filepath1, $filepath2);
     $normalizedYamlFormat = $format === 'yml' ? 'yaml' : $format;
