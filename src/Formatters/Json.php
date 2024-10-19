@@ -4,5 +4,5 @@ namespace Formatters\Json;
 
 function makeJson($data)
 {
-    return '';
+    return json_encode('');
 }
