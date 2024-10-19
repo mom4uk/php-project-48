@@ -28,7 +28,7 @@ function isAssociativeArray(string|array|null|int $value)
     if (!is_array($value)) {
         return false;
     }
-    $decodedValue = json_decode(json_encode($value), false);
+    $decodedValue = json_decode(strval(json_encode($value)), false);
     return !is_array($decodedValue);
 }
 
@@ -64,7 +64,6 @@ function getContents(string $filepath1, string $filepath2)
 {
     $format = getFormat($filepath1, $filepath2);
     $normalizedYamlFormat = $format === 'yml' ? 'yaml' : $format;
-    $wrap = fn($item): string => file_get_contents($item);
     switch ($normalizedYamlFormat) {
         case 'json':
             $file1Content = json_decode(strval(file_get_contents($filepath1)), true);
@@ -73,8 +72,8 @@ function getContents(string $filepath1, string $filepath2)
         case 'yaml':
             $file1Content = Yaml::parse(strval(file_get_contents($filepath1)), Yaml::PARSE_OBJECT_FOR_MAP);
             $file2Content = Yaml::parse(strval(file_get_contents($filepath2)), Yaml::PARSE_OBJECT_FOR_MAP);
-            $decodedContent1 = json_decode(json_encode($file1Content), true);
-            $decodedContent2 = json_decode(json_encode($file2Content), true);
+            $decodedContent1 = json_decode(strval(json_encode($file1Content)), true);
+            $decodedContent2 = json_decode(strval(json_encode($file2Content)), true);
             return [$decodedContent1, $decodedContent2];
     }
 }
