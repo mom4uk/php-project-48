@@ -3,6 +3,7 @@
 namespace Php\Package\Tests;
 
 use PHPUnit\Framework\TestCase;
+
 use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
@@ -15,8 +16,8 @@ class DifferTest extends TestCase
     }
 
     /** @test */
-    public function DiffTestJson(): void
-    {     
+    public function diffTestJson(): void
+    {
         $firstFilePathJson = $this->getFilePath('file1.json');
         $secondFilePathJson = $this->getFilePath('file2.json');
 
