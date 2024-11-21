@@ -22,7 +22,7 @@ It is a project of PHP courses from the Hexlet educational portal.
 ## Installation
 
 ```
-$ git clone https://github.com/kaivladimirv/php-project-48.git
+$ git clone https://github.com/mom4uk/php-project-48.git
 
 $ cd php-project-48
 
