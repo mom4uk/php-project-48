@@ -28,3 +28,7 @@ $ cd php-project-48
 
 $ make install
 ```
+
+## Sample
+
+[![asciicast](https://asciinema.org/a/3exr0JCmOewtEVNC6Crgfhh3S.svg)](https://asciinema.org/a/3exr0JCmOewtEVNC6Crgfhh3S)
